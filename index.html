@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>部隊元素表格</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            border: 2px solid #ddd;
+            padding: 12px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        
+        th {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        
+        td {
+            background-color: #f9f9f9;
+            height: 50px;
+        }
+        
+        .unit-name {
+            background-color: #e8f5e8;
+            font-weight: bold;
+            color: #2e7d32;
+            width: 60px;
+            min-width: 60px;
+        }
+        
+        .element-header img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+        
+        tr:nth-child(even) td {
+            background-color: #f0f0f0;
+        }
+        
+        tr:hover td {
+            background-color: #e3f2fd;
+        }
+        
+        .element-cell {
+            width: 150px;
+            padding: 4px;
+            line-height: 1;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th class="element-header"><img src="img/element/Nonelement.webp" alt="無" title="無"></th>
+                <th class="element-header"><img src="img/element/Fire.webp" alt="火" title="火"></th>
+                <th class="element-header"><img src="img/element/Ice.webp" alt="冰" title="冰"></th>
+                <th class="element-header"><img src="img/element/Thunder.webp" alt="雷" title="雷"></th>
+                <th class="element-header"><img src="img/element/Light.webp" alt="光" title="光"></th>
+                <th class="element-header"><img src="img/element/Dark.webp" alt="暗" title="暗"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="unit-name">31A</td>
+                <td class="element-cell"></td>
+                <td class="element-cell"></td>
+                <td class="element-cell"></td>
+                <td class="element-cell"></td>
+                <td class="element-cell"></td>
+                <td class="element-cell"></td>
+            </tr>
+            <tr>
+                <td class="unit-name">31B</td>
+                <td class="element-cell"></td>
+                <td class="element-cell"></td>
+                <td class="element-cell"></td>
+                <td class="element-cell"></td>
+                <td class="element-cell"></td>
+                <td class="element-cell"></td>
+            </tr>
+            <tr>
+                <td class="unit-name">31C</td>
+                <td class="element-cell"></td>
+                <td class="element-cell"></td>
+                <td class="element-cell"></td>
+                <td class="element-cell"></td>
+                <td class="element-cell"></td>
+                <td class="element-cell"></td>
+            </tr>
+            <tr>
+                <td class="unit-name">31D</td>
+                <td class="element-cell"></td>
+                <td class="element-cell"></td>
+                <td class="element-cell"></td>
+                <td class="element-cell"></td>
+                <td class="element-cell"></td>
+                <td class="element-cell"></td>
+            </tr>
+            <tr>
+                <td class="unit-name">31E</td>
+                <td class="element-cell"></td>
+                <td class="element-cell"></td>
+                <td class="element-cell"></td>
+                <td class="element-cell"></td>
+                <td class="element-cell"></td>
+                <td class="element-cell"></td>
+            </tr>
+            <tr>
+                <td class="unit-name">31F</td>
+                <td class="element-cell"></td>
+                <td class="element-cell"></td>
+                <td class="element-cell"></td>
+                <td class="element-cell"></td>
+                <td class="element-cell"></td>
+                <td class="element-cell"></td>
+            </tr>
+            <tr>
+                <td class="unit-name">31X</td>
+                <td class="element-cell"></td>
+                <td class="element-cell"></td>
+                <td class="element-cell"></td>
+                <td class="element-cell"></td>
+                <td class="element-cell"></td>
+                <td class="element-cell"></td>
+            </tr>
+            <tr>
+                <td class="unit-name">30G</td>
+                <td class="element-cell"></td>
+                <td class="element-cell"></td>
+                <td class="element-cell"></td>
+                <td class="element-cell"></td>
+                <td class="element-cell"></td>
+                <td class="element-cell"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        // 讀取eq.txt檔案並填入表格
+        async function loadTableData() {
+            try {
+                const response = await fetch('eq.txt');
+                const text = await response.text();
+                const lines = text.trim().split('\n');
+                
+                // 解析資料
+                const data = {};
+                const units = ['31A', '31B', '31C', '31D', '31E', '31F', '31X', '30G'];
+                const elements = ['無', '火', '冰', '雷', '光', '暗'];
+                
+                // 初始化資料結構
+                units.forEach(unit => {
+                    data[unit] = {};
+                    elements.forEach(element => {
+                        data[unit][element] = [];
+                    });
+                });
+                
+                // 解析每一行資料
+                lines.forEach(line => {
+                    const parts = line.split(',');
+                    if (parts.length === 3) {
+                        const [imageName, element, unit] = parts.map(part => part.trim());
+                        if (data[unit] && data[unit][element]) {
+                            data[unit][element].push(imageName);
+                        }
+                    }
+                });
+                
+                // 填入表格
+                const tbody = document.querySelector('tbody');
+                tbody.innerHTML = '';
+                
+                units.forEach(unit => {
+                    const row = document.createElement('tr');
+                    
+                    // 部隊名稱欄位
+                    const unitCell = document.createElement('td');
+                    unitCell.className = 'unit-name';
+                    unitCell.textContent = unit;
+                    row.appendChild(unitCell);
+                    
+                    // 各元素欄位
+                    elements.forEach(element => {
+                        const cell = document.createElement('td');
+                        cell.className = 'element-cell';
+                        
+                        const images = data[unit][element];
+                        if (images && images.length > 0) {
+                            // 顯示所有圖片
+                            images.forEach(imageName => {
+                                const img = document.createElement('img');
+                                img.src = `img/style/${imageName}`;
+                                img.style.width = '80px';
+                                img.style.height = '80px';
+                                img.style.objectFit = 'contain';
+                                img.style.margin = '0px';
+                                img.style.display = 'inline-block';
+                                
+                                cell.appendChild(img);
+                            });
+                        }
+                        
+                        row.appendChild(cell);
+                    });
+                    
+                    tbody.appendChild(row);
+                });
+                
+            } catch (error) {
+                console.error('載入資料時發生錯誤:', error);
+            }
+        }
+        
+        // 頁面載入完成後執行
+        document.addEventListener('DOMContentLoaded', loadTableData);
+    </script>
+</body>
+</html>

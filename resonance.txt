@@ -1,0 +1,12 @@
+﻿頭像,屬性
+RKayamoriCombat2023_R3_StylePiece.webp,"火, 暗"
+YIzumiCombat2023_R3_StylePiece.webp,"火, 暗"
+EAoiSwim2025_R3_StylePiece.webp,暗
+BIYamawakiWhiteSuit_R3_StylePiece.webp,冰
+YBungoEvil_R3_StylePiece.webp,無
+MNikaidoWhiteSuit_R3_StylePiece.webp,火
+IcOhshimaWhiteSuit_R3_StylePiece.webp,光
+MYanagiWhiteSuit_R3_StylePiece.webp,無
+YShirakawaSocial_R3_StylePiece.webp,冰
+YShirakawaWhiteSuit_R3_StylePiece.webp,光
+NNanaseRider_R3_StylePiece.webp,雷

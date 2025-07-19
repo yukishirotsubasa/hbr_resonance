@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resonance 屬性表格</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            border: 2px solid #ddd;
+            padding: 8px;
+            text-align: center;
+            vertical-align: middle;
+        }
+        
+        th {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        td {
+            background-color: #f9f9f9;
+            height: 80px;
+        }
+        
+        .element-header img {
+            width: 30px;
+            height: 30px;
+            object-fit: contain;
+            margin: 1px;
+        }
+        
+        .dual-element {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+        }
+        
+        tr:nth-child(even) td {
+            background-color: #f0f0f0;
+        }
+        
+        tr:hover td {
+            background-color: #e3f2fd;
+        }
+        
+        .element-cell {
+            width: 120px;
+            padding: 4px;
+            line-height: 1;
+        }
+        
+        .resonance-img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin: 0px;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <thead>
+            <!-- 動態生成的header -->
+        </thead>
+        <tbody>
+            <!-- 動態生成的資料 -->
+        </tbody>
+    </table>
+
+    <script>
+        // 讀取resonance.txt檔案並填入表格
+        async function loadResonanceData() {
+            try {
+                const response = await fetch('resonance.txt');
+                const text = await response.text();
+                const lines = text.trim().split('\n');
+                
+                // 跳過標題行
+                const dataLines = lines.slice(1);
+                
+                // 收集所有unique的屬性組合
+                const uniqueElements = new Set();
+                const data = {};
+                
+                // 解析每一行資料並收集屬性
+                dataLines.forEach(line => {
+                    const parts = line.split(',');
+                    if (parts.length >= 2) {
+                        const imageName = parts[0].trim();
+                        // 處理可能有引號的屬性欄位
+                        let element = parts.slice(1).join(',').trim();
+                        // 移除引號
+                        element = element.replace(/^"/, '').replace(/"$/, '');
+                        
+                        uniqueElements.add(element);
+                        
+                        if (!data[element]) {
+                            data[element] = [];
+                        }
+                        data[element].push(imageName);
+                    }
+                });
+                
+                // 自定義排序：單一屬性按指定順序，多屬性排在最後
+                const singleElementOrder = ['無', '火', '冰', '雷', '光', '暗'];
+                const sortedElements = Array.from(uniqueElements).sort((a, b) => {
+                    const aIsSingle = !a.includes(',');
+                    const bIsSingle = !b.includes(',');
+                    
+                    // 如果都是單一屬性，按照指定順序排列
+                    if (aIsSingle && bIsSingle) {
+                        const aIndex = singleElementOrder.indexOf(a);
+                        const bIndex = singleElementOrder.indexOf(b);
+                        return aIndex - bIndex;
+                    }
+                    
+                    // 單一屬性排在多屬性前面
+                    if (aIsSingle && !bIsSingle) return -1;
+                    if (!aIsSingle && bIsSingle) return 1;
+                    
+                    // 如果都是多屬性，按字母順序排列
+                    return a.localeCompare(b);
+                });
+                
+                // 動態生成表格header
+                const thead = document.querySelector('thead');
+                const tbody = document.querySelector('tbody');
+                
+                // 清空現有內容
+                thead.innerHTML = '';
+                tbody.innerHTML = '';
+                
+                // 創建header row
+                const headerRow = document.createElement('tr');
+                sortedElements.forEach(element => {
+                    const th = document.createElement('th');
+                    
+                    // 處理雙屬性顯示
+                    if (element.includes(',')) {
+                        const elements = element.split(',').map(e => e.trim());
+                        const elementMap = {
+                            '無': 'Nonelement',
+                            '火': 'Fire',
+                            '冰': 'Ice',
+                            '雷': 'Thunder',
+                            '光': 'Light',
+                            '暗': 'Dark'
+                        };
+                        
+                        th.className = 'dual-element';
+                        elements.forEach(el => {
+                            const img = document.createElement('img');
+                            img.src = `img/element/${elementMap[el]}.webp`;
+                            img.alt = el;
+                            img.title = el;
+                            th.appendChild(img);
+                        });
+                    } else {
+                        // 單一屬性
+                        const elementMap = {
+                            '無': 'Nonelement',
+                            '火': 'Fire',
+                            '冰': 'Ice',
+                            '雷': 'Thunder',
+                            '光': 'Light',
+                            '暗': 'Dark'
+                        };
+                        
+                        if (elementMap[element]) {
+                            const img = document.createElement('img');
+                            img.src = `img/element/${elementMap[element]}.webp`;
+                            img.alt = element;
+                            img.title = element;
+                            th.appendChild(img);
+                        } else {
+                            th.textContent = element;
+                        }
+                    }
+                    
+                    headerRow.appendChild(th);
+                });
+                thead.appendChild(headerRow);
+                
+                // 創建資料row
+                const dataRow = document.createElement('tr');
+                sortedElements.forEach(element => {
+                    const cell = document.createElement('td');
+                    cell.className = 'element-cell';
+                    
+                    const images = data[element];
+                    if (images && images.length > 0) {
+                        // 顯示所有圖片
+                        images.forEach(imageName => {
+                            const img = document.createElement('img');
+                            img.src = `img/resonance/${imageName}`;
+                            img.className = 'resonance-img';
+                            
+                            cell.appendChild(img);
+                        });
+                    }
+                    
+                    dataRow.appendChild(cell);
+                });
+                tbody.appendChild(dataRow);
+                
+            } catch (error) {
+                console.error('載入資料時發生錯誤:', error);
+            }
+        }
+        
+        // 頁面載入完成後執行
+        document.addEventListener('DOMContentLoaded', loadResonanceData);
+    </script>
+</body>
+</html>
