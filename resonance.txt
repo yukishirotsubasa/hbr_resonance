@@ -10,3 +10,5 @@ MYanagiWhiteSuit_R3_StylePiece.webp,無
 YShirakawaSocial_R3_StylePiece.webp,冰
 YShirakawaWhiteSuit_R3_StylePiece.webp,光
 NNanaseRider_R3_StylePiece.webp,雷
+SKuraSwim2025_R3_StylePiece.webp,無
+MKiryuSwim2025_R3_StylePiece.webp,火
